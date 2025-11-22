@@ -244,7 +244,12 @@
             justify-content: center;
             margin-bottom: 30px;
             flex-wrap: nowrap;
-            gap: 15px;
+            overflow-x: auto;
+            gap: 10px;
+            scrollbar-width: none;
+        }
+        .menu-filters::-webkit-scrollbar {
+            display: none;
         }
 
         .filter-btn {
