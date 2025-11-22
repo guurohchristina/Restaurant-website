@@ -589,6 +589,16 @@
             section {
                 padding: 60px 0;
             }
+            @media (max-width: 414px) {
+                .menu-filters{
+                overflow-x: auto;
+            gap: 10px;
+            scrollbar-width: none;
+        }
+        .menu-filters::-webkit-scrollbar {
+            display: none;
+    }
+            }
         }
     </style>
 </head>
