@@ -1056,12 +1056,50 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         });
 
         // Handle Form Submission
-        orderForm.addEventListener('submit', (e) => {
+     /*   orderForm.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Thank you for your order! We will contact you shortly to confirm your details.');
             closeModalFunc();
             orderForm.reset();
-        });
+        });*/
+
+        // Updated Handle Form Submission for SMS
+orderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // 1. Get the values from the form
+    const itemName = document.getElementById('modal-title').textContent;
+    const quantity = document.getElementById('quantity').value;
+    const customerName = document.getElementById('name').value;
+    const customerPhone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const specialRequests = document.getElementById('special-requests').value || "None";
+
+    // 2. Format the message
+    const message = `New Order from Loco Loca:%0a` +
+                    `----------------------%0a` +
+                    `Item: ${itemName}%0a` +
+                    `Quantity: ${quantity}%0a` +
+                    `Customer: ${customerName}%0a` +
+                    `Phone: ${customerPhone}%0a` +
+                    `Address: ${address}%0a` +
+                    `Notes: ${specialRequests}`;
+
+    // 3. Set your restaurant's receiving phone number (International format)
+    const restaurantNumber = "+233551218719"; 
+
+    // 4. Create the SMS link
+    // 'sms:' protocol opens the messaging app
+    const smsLink = `sms:${restaurantNumber}?body=${message}`;
+
+    // 5. Redirect the user to the SMS app
+    window.location.href = smsLink;
+
+    // Optional: Close modal and alert
+    alert('Opening your SMS app to send the order...');
+    closeModalFunc();
+    orderForm.reset();
+});
 
         // Mobile Navigation
         hamburger.addEventListener('click', () => {
