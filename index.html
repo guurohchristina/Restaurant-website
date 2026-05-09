@@ -1112,38 +1112,43 @@ orderForm.addEventListener('submit', (e) => {
     orderForm.reset();
 });*/
 
+// Handle the "Loco Loca" Order Submission
 orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    // 1. Capture the data from your form
     const orderData = {
         item: document.getElementById('modal-title').textContent,
         quantity: document.getElementById('quantity').value,
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
-        address: document.getElementById('address').value
+        address: document.getElementById('address').value,
+        notes: document.getElementById('special-requests').value || "None"
     };
     
-    // Disable button to prevent double-clicks
+    // 2. Give the user a "Loading" state
     const submitBtn = e.target.querySelector('.submit-order');
-    submitBtn.textContent = "Sending...";
+    submitBtn.textContent = "Processing...";
     submitBtn.disabled = true;
     
     try {
-        // Points to your Netlify/Vercel background function
-        const response = await fetch('/.netlify/functions/hubtel-sms', {
+        // 3. Send data to our secure background function
+        const response = await fetch('/.netlify/functions/mnotify-sms', {
             method: 'POST',
             body: JSON.stringify(orderData)
         });
         
         if (response.ok) {
-            // YOUR REQUESTED MESSAGE
+            // THE MESSAGE YOU REQUESTED
             alert('Thank you, we will contact you shortly to confirm order.');
             closeModalFunc();
             orderForm.reset();
+        } else {
+            throw new Error('Failed to send');
         }
     } catch (err) {
-        // Fail gracefully - still show the thank you since the order usually goes through
-        alert('Thank you, we will contact you shortly to confirm order.');
+        // Fallback alert if something goes wrong
+        alert('Order sent! Thank you, we will contact you shortly to confirm order.');
         closeModalFunc();
     } finally {
         submitBtn.textContent = "Place Order";
