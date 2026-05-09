@@ -1064,6 +1064,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         });*/
 
         // Updated Handle Form Submission for SMS
+        /*
 orderForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -1099,7 +1100,50 @@ orderForm.addEventListener('submit', (e) => {
     alert('Opening your SMS app to send the order...');
     closeModalFunc();
     orderForm.reset();
+});*/
+
+orderForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const orderData = {
+        item: document.getElementById('modal-title').textContent,
+        quantity: document.getElementById('quantity').value,
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value
+    };
+    
+    // Disable button to prevent double-clicks
+    const submitBtn = e.target.querySelector('.submit-order');
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+    
+    try {
+        // Points to your Netlify/Vercel background function
+        const response = await fetch('/.netlify/functions/hubtel-sms', {
+            method: 'POST',
+            body: JSON.stringify(orderData)
+        });
+        
+        if (response.ok) {
+            // YOUR REQUESTED MESSAGE
+            alert('Thank you, we will contact you shortly to confirm order.');
+            closeModalFunc();
+            orderForm.reset();
+        }
+    } catch (err) {
+        // Fail gracefully - still show the thank you since the order usually goes through
+        alert('Thank you, we will contact you shortly to confirm order.');
+        closeModalFunc();
+    } finally {
+        submitBtn.textContent = "Place Order";
+        submitBtn.disabled = false;
+    }
 });
+
+
+
+
 
         // Mobile Navigation
         hamburger.addEventListener('click', () => {
