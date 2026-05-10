@@ -1112,49 +1112,53 @@ orderForm.addEventListener('submit', (e) => {
     orderForm.reset();
 });*/
 
-// Handle the "Loco Loca" Order Submission
+const orderForm = document.getElementById('order-form');
+
 orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // 1. Capture the data from your form
     const orderData = {
         item: document.getElementById('modal-title').textContent,
         quantity: document.getElementById('quantity').value,
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
         address: document.getElementById('address').value,
-        notes: document.getElementById('special-requests').value || "None"
+        notes: document.getElementById('special-requests').value
     };
     
-    // 2. Give the user a "Loading" state
     const submitBtn = e.target.querySelector('.submit-order');
     submitBtn.textContent = "Processing...";
     submitBtn.disabled = true;
     
     try {
-        // 3. Send data to our secure background function
-        const response = await fetch('/.netlify/functions/mnotify-sms', {
+        // Points to your Render backend
+        const response = await fetch('/send-sms', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderData)
         });
         
         if (response.ok) {
-            // THE MESSAGE YOU REQUESTED
             alert('Thank you, we will contact you shortly to confirm order.');
             closeModalFunc();
             orderForm.reset();
-        } else {
-            throw new Error('Failed to send');
         }
-    } catch (err) {
-        // Fallback alert if something goes wrong
-        alert('Order sent! Thank you, we will contact you shortly to confirm order.');
+    } catch (error) {
+        // Fallback alert
+        alert('Thank you, we will contact you shortly to confirm order.');
         closeModalFunc();
     } finally {
         submitBtn.textContent = "Place Order";
         submitBtn.disabled = false;
     }
 });
+   
+
+    // Helper to close modal (if not already in your script)
+    function closeModalFunc() {
+        document.getElementById('order-modal').style.display = 'none';
+    }
+
 
 
 
