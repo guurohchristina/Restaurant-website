@@ -857,299 +857,7 @@
 
     <script>
 
-/*
-let currentIndex = 0;
 
-function moveSlide(direction) {
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    const inner = document.getElementById('slideInner');
-
-    currentIndex += direction;
-
-    if (currentIndex >= totalSlides) {
-        currentIndex = 0;
-    } else if (currentIndex < 0) {
-        currentIndex = totalSlides - 1;
-    }
-
-    const offset = -currentIndex * 100;
-    inner.style.transform = `translateY(${offset}%)`;
-}
-
-// Auto-play timer
-let autoSlide = setInterval(() => {
-    moveSlide(1);
-}, 5000);
-
-// Reset timer on manual click
-function resetTimer() {
-    clearInterval(autoSlide);
-    autoSlide = setInterval(() => {
-        moveSlide(1);
-    }, 5000);
-}
-
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', resetTimer);
-});
-
-        
-        // Menu Data
-        const menuItems = [
-            {
-                id: 1,
-                name: "Fufu with goat Light soup",
-                category: "appetizers",
-                price: 8.99,
-                image: "https://iili.io/BtQbGHu.jpg",
-                description: "add description later."
-            },
-            {
-                id: 2,
-                name: "Fufu, groundnut soup",
-                category: "appetizers",
-                price: 10.99,
-                image: "https://iili.io/BtQbVNj.jpg",
-                description: "add description later."
-            },
-            {
-    id: 3,
-    name: "Rice Ball, groundnut soup",
-    category: "appetizers",
-    price: 10.99,
-    image: "https://iili.io/BtQb1Se.jpg",
-    description: "add description later."
-},
-            
-            {
-                id: 4,
-                name: "Fried Rice, Salad, chicken",
-                category: "mains",
-                price: 24.99,
-                image: "https://iili.io/BtQb0l9.jpg",
-                description: "Fresh salmon fillet grilled to perfection, served with seasonal vegetables."
-            },
-            {
-                id: 5,
-                name: "jollof rice with chicken",
-                category: "mains",
-                price: 32.99,
-                image: "https://iili.io/BtQbMAb.jpg",
-                description: "Add description later."
-            },
-            {
-                id: 6,
-                name: "Mushroom Risotto",
-                category: "mains",
-                price: 18.99,
-                image: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                description: "Creamy arborio rice with wild mushrooms and parmesan cheese."
-            },
-            {
-                id: 7,
-                name: "Tiramisu",
-                category: "desserts",
-                price: 8.99,
-                image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                description: "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cream."
-            },
-            {
-                id: 8,
-                name: "Chocolate Lava Cake",
-                category: "desserts",
-                price: 9.99,
-                image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                description: "Warm chocolate cake with a molten center, served with vanilla ice cream."
-            },
-            {
-                id: 9,
-                name: "Craft Cocktails",
-                category: "drinks",
-                price: 12.99,
-                image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1586&q=80",
-                description: "Handcrafted cocktails made with premium spirits and fresh ingredients."
-            },
-            {
-                id: 10,
-                name: "Wine Selection",
-                category: "drinks",
-                price: 9.99,
-                image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                description: "Curated selection of red, white, and sparkling wines from around the world."
-            }
-        ];
-
-        // DOM Elements
-        const menuGrid = document.getElementById('menu-grid');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const modal = document.getElementById('orderModal');
-        const closeModal = document.querySelector('.close-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalImg = document.getElementById('modal-img');
-        const modalPrice = document.getElementById('modal-price');
-        const modalDesc = document.getElementById('modal-desc');
-        const orderForm = document.getElementById('order-form');
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        // Display Menu Items
-        function displayMenuItems(items) {
-            // Sort items alphabetically by name
-            items.sort((a, b) => a.name.localeCompare(b.name));
-            
-            menuGrid.innerHTML = '';
-            
-            items.forEach(item => {
-                const menuItem = document.createElement('div');
-                menuItem.classList.add('menu-item');
-                menuItem.setAttribute('data-category', item.category);
-                menuItem.innerHTML = `
-                    <div class="menu-item-image">
-                        <img src="${item.image}" alt="${item.name}">
-                    </div>
-                    <div class="menu-item-content">
-                        <div class="menu-item-title">
-                            <h3>${item.name}</h3>
-                            <span class="menu-item-price">₵ ${item.price.toFixed(2)}</span>
-                        </div>
-                        <p class="menu-item-desc">${item.description}</p>
-                    </div>
-                `;
-                
-                menuItem.addEventListener('click', () => openModal(item));
-                menuGrid.appendChild(menuItem);
-            });
-        }
-
-        // Filter Menu Items
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterBtns.forEach(btn => btn.classList.remove('active'));
-                // Add active class to clicked button
-                btn.classList.add('active');
-                
-                const filter = btn.getAttribute('data-filter');
-                
-                if (filter === 'all') {
-                    displayMenuItems(menuItems);
-                } else {
-                    const filteredItems = menuItems.filter(item => item.category === filter);
-                    displayMenuItems(filteredItems);
-                }
-            });
-        });
-
-        // Open Modal
-        function openModal(item) {
-            modalTitle.textContent = item.name;
-            modalImg.src = item.image;
-            modalImg.alt = item.name;
-            modalPrice.textContent = `₵ ${item.price.toFixed(2)}`;
-            modalDesc.textContent = item.description;
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Close Modal
-        function closeModalFunc() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        closeModal.addEventListener('click', closeModalFunc);
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalFunc();
-            }
-        });
-
-
-
- 
-
-
-const orderForm = document.getElementById('order-form');
-
-orderForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const orderData = {
-        item: document.getElementById('modal-title').textContent,
-        quantity: document.getElementById('quantity').value,
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        address: document.getElementById('address').value,
-        notes: document.getElementById('special-requests').value
-    };
-    
-    const submitBtn = e.target.querySelector('.submit-order');
-    submitBtn.textContent = "Processing...";
-    submitBtn.disabled = true;
-    
-    try {
-        // Points to your Render backend
-        const response = await fetch('/send-sms', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        });
-        
-        if (response.ok) {
-            alert('Thank you, we will contact you shortly to confirm order.');
-            closeModalFunc();
-            orderForm.reset();
-        }
-    } catch (error) {
-        // Fallback alert
-        alert('Thank you, we will contact you shortly to confirm order.');
-        closeModalFunc();
-    } finally {
-        submitBtn.textContent = "Place Order";
-        submitBtn.disabled = false;
-    }
-});
-   
-
-    // Helper to close modal (if not already in your script)
-    function closeModalFunc() {
-        document.getElementById('order-modal').style.display = 'none';
-    }
-
-
-
-
-
-
-        // Mobile Navigation
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    navLinks.classList.remove('active');
-                }
-            });
-        });
-
-        // Initialize
-        displayMenuItems(menuItems);
-        */
       
     // 1. GLOBAL VARIABLES & SELECTORS
     let currentIndex = 0;
@@ -1166,7 +874,7 @@ orderForm.addEventListener('submit', async (e) => {
     const navLinks = document.querySelector('.nav-links');
 
     // 2. SLIDESHOW LOGIC
-    function moveSlide(direction) {
+/*    function moveSlide(direction) {
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
         const inner = document.getElementById('slideInner');
@@ -1190,6 +898,70 @@ orderForm.addEventListener('submit', async (e) => {
         clearInterval(autoSlide);
         autoSlide = setInterval(() => moveSlide(1), 5000);
     }
+*/
+
+
+// 1. Initialize the index
+let currentIndex = 0;
+
+/**
+ * Moves the slideshow vertically
+ * @param {number} direction - 1 for forward, -1 for backward
+ */
+function moveSlide(direction) {
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const inner = document.getElementById('slideInner');
+    
+    // Safety check: exit if the element doesn't exist
+    if (!inner || totalSlides === 0) return;
+    
+    // Update the index
+    currentIndex += direction;
+    
+    // Loop back logic
+    if (currentIndex >= totalSlides) {
+        currentIndex = 0; // Go back to the first slide
+    } else if (currentIndex < 0) {
+        currentIndex = totalSlides - 1; // Go to the last slide
+    }
+    
+    // Calculate the vertical offset
+    // Since each slide is 100% height, we multiply index by 100
+    const offset = -currentIndex * 100;
+    
+    // Apply the vertical transformation
+    inner.style.transform = `translateY(${offset}%)`;
+}
+
+// 2. Auto-play Setup
+// Moves the slide every 5 seconds
+let autoSlide = setInterval(() => {
+    moveSlide(1);
+}, 5000);
+
+/**
+ * Resets the timer so clicking a button doesn't 
+ * cause a double-jump immediately after.
+ */
+function resetTimer() {
+    clearInterval(autoSlide);
+    autoSlide = setInterval(() => {
+        moveSlide(1);
+    }, 5000);
+}
+
+// 3. Optional: Attach to Nav Buttons if you have them
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Example: if button has a data-dir="1" or "-1"
+        const dir = parseInt(btn.getAttribute('data-dir')) || 1;
+        moveSlide(dir);
+        resetTimer();
+    });
+});
+
+
 
     // 3. MENU DATA
     const menuItems = [
