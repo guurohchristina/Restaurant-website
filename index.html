@@ -874,7 +874,7 @@
     const navLinks = document.querySelector('.nav-links');
 
     // 2. SLIDESHOW LOGIC
-/*    function moveSlide(direction) {
+  function moveSlide(direction) {
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
         const inner = document.getElementById('slideInner');
@@ -898,68 +898,7 @@
         clearInterval(autoSlide);
         autoSlide = setInterval(() => moveSlide(1), 5000);
     }
-*/
 
-
-// 1. Initialize the index
-let currentIndex = 0;
-
-/**
- * Moves the slideshow vertically
- * @param {number} direction - 1 for forward, -1 for backward
- */
-function moveSlide(direction) {
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    const inner = document.getElementById('slideInner');
-    
-    // Safety check: exit if the element doesn't exist
-    if (!inner || totalSlides === 0) return;
-    
-    // Update the index
-    currentIndex += direction;
-    
-    // Loop back logic
-    if (currentIndex >= totalSlides) {
-        currentIndex = 0; // Go back to the first slide
-    } else if (currentIndex < 0) {
-        currentIndex = totalSlides - 1; // Go to the last slide
-    }
-    
-    // Calculate the vertical offset
-    // Since each slide is 100% height, we multiply index by 100
-    const offset = -currentIndex * 100;
-    
-    // Apply the vertical transformation
-    inner.style.transform = `translateY(${offset}%)`;
-}
-
-// 2. Auto-play Setup
-// Moves the slide every 5 seconds
-let autoSlide = setInterval(() => {
-    moveSlide(1);
-}, 5000);
-
-/**
- * Resets the timer so clicking a button doesn't 
- * cause a double-jump immediately after.
- */
-function resetTimer() {
-    clearInterval(autoSlide);
-    autoSlide = setInterval(() => {
-        moveSlide(1);
-    }, 5000);
-}
-
-// 3. Optional: Attach to Nav Buttons if you have them
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Example: if button has a data-dir="1" or "-1"
-        const dir = parseInt(btn.getAttribute('data-dir')) || 1;
-        moveSlide(dir);
-        resetTimer();
-    });
-});
 
 
 
