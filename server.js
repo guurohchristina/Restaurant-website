@@ -20,7 +20,7 @@ app.post('/send-sms', async (req, res) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        recipient: ["0551218719"],
+        recipient: ["0507585070"],
         sender: "Loco Loca", // Use "mNotify" as sender until "LocoLoca" is approved by them
         message: message,
         is_schedule: false
