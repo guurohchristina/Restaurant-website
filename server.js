@@ -6,11 +6,13 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, '.'))); // Serves your HTML files
+app.use(express.static(path.join(__dirname, '.')));
 
 app.post('/send-sms', async (req, res) => {
   const data = req.body;
   const apiKey = process.env.MNOTIFY_KEY;
+  
+  // 1. FIX: Changed Sender to "mNotify" for guaranteed delivery during testing
   const message = `🍔 LOCO LOCA ORDER:\nItem: ${data.item}\nQty: ${data.quantity}\nCust: ${data.name}\nPh: ${data.phone}\nAdd: ${data.address}`;
   
   try {
@@ -19,13 +21,26 @@ app.post('/send-sms', async (req, res) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         recipient: ["0551218719"],
-        sender: "LocoLoca",
+        sender: "mNotify", // Use "mNotify" as sender until "LocoLoca" is approved by them
         message: message,
         is_schedule: false
       })
     });
-    res.status(200).send("Order Sent");
+    
+    // 2. FIX: Capture the actual response from mNotify to see why it failed
+    const result = await response.json();
+    console.log("mNotify API Result:", result);
+    
+    if (result.status === "success") {
+      res.status(200).send("Order Sent");
+    } else {
+      // This will show up in your Render Logs
+      console.error("mNotify Error Details:", result.message);
+      res.status(400).send(`SMS Failed: ${result.message}`);
+    }
+    
   } catch (error) {
+    console.error("Server Error:", error);
     res.status(500).send(error.message);
   }
 });
