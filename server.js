@@ -15,7 +15,7 @@ app.post('/send-sms', async (req, res) => {
   // 1. FIX: Changed Sender to "mNotify" for guaranteed delivery during testing
   const message = `🍽️LOCO LOCA ORDER:\nItem: ${data.item}\nQty: ${data.quantity}\nAmount:${data.price}\nCustomer: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}\nSpecial Request: ${data.special}`;
   
-const customerMessage = `Hello ${data.name}, thank you for your Loco Loca order! We have received it and will call you shortly to confirm.`;
+const customerMessage = `Hello🤗 ${data.name}, thank you for your Loco Loca order! We have received it and will call you shortly to confirm.🫡`;
   
   try {
     const response = await fetch(`https://api.mnotify.com/api/sms/quick?key=${apiKey}`, {
