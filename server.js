@@ -15,6 +15,8 @@ app.post('/send-sms', async (req, res) => {
   // 1. FIX: Changed Sender to "mNotify" for guaranteed delivery during testing
   const message = `🍽️LOCO LOCA ORDER:\nItem: ${data.item}\nQty: ${data.quantity}\nAmount:${data.price}\nCustomer: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}\nSpecial Request: ${data.special}`;
   
+const customerMessage = `Hello ${data.name}, thank you for your Loco Loca order! We have received it and will call you shortly to confirm.`;
+  
   try {
     const response = await fetch(`https://api.mnotify.com/api/sms/quick?key=${apiKey}`, {
       method: 'POST',
@@ -26,6 +28,20 @@ app.post('/send-sms', async (req, res) => {
         is_schedule: false
       })
     });
+    
+    const customerRes = await fetch(`https://api.mnotify.com/api/sms/quick?key=${apiKey}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    recipient: [data.phone], // This pulls the customer's number
+    sender: "mNotify",
+    message: customerMessage,
+    is_schedule: false
+  })
+});
+    
+    
+    
     
     // 2. FIX: Capture the actual response from mNotify to see why it failed
     const result = await response.json();
