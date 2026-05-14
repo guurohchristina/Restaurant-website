@@ -34,7 +34,7 @@ const customerMessage = `Hello ${data.name}, thank you for your Loco Loca order!
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     recipient: [data.phone], // This pulls the customer's number
-    sender: "mNotify",
+    sender: "Loco Loca",
     message: customerMessage,
     is_schedule: false
   })
