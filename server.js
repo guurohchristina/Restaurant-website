@@ -13,7 +13,7 @@ app.post('/send-sms', async (req, res) => {
   const apiKey = process.env.MNOTIFY_KEY;
   
   // 1. FIX: Changed Sender to "mNotify" for guaranteed delivery during testing
-  const message = `🍽️LOCO LOCA ORDER:\nItem: ${data.item}\nQty: ${data.quantity}\nAmount:${data.price}\nCustomer: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}\nSpecial request: ${data.special-requests}`;
+  const message = `🍽️LOCO LOCA ORDER:\nItem: ${data.item}\nQty: ${data.quantity}\nAmount:${data.price}\nCustomer: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}`;
   
   try {
     const response = await fetch(`https://api.mnotify.com/api/sms/quick?key=${apiKey}`, {
