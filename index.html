@@ -309,37 +309,41 @@
         }
 
 
-/* Container that holds the sliding images */
-.image-stream {
-    display: flex;
-    overflow-x: auto;      /* Allows horizontal scrolling */
-    gap: 15px;
-    padding: 20px 0;
-    scroll-snap-type: x mandatory; /* Makes images "snap" into view */
-    scrollbar-width: none;  /* Hides scrollbar for Firefox */
-    -ms-overflow-style: none; /* Hides scrollbar for IE/Edge */
+.slider-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Hide scrollbar */
+  -ms-overflow-style: none;
 }
 
-/* Hides scrollbar for Chrome/Safari */
-.image-stream::-webkit-scrollbar {
-    display: none;
+.slider-wrapper::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome */
 }
 
-/* Individual Image Item */
-.stream-item {
-    flex: 0 0 80%;         /* Shows 80% of the image so the next one peaks in */
-    scroll-snap-align: center;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: #3C444E; /* Using your Primary Dark color */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+.image-track {
+  display: flex;
+  padding: 40px 0; /* Vertical breathing room */
+  /* This padding ensures the first and last images can also be centered */
+  padding-left: calc(50% - 150px); 
+  padding-right: calc(50% - 150px);
+  gap: 20px;
 }
 
-.stream-item img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;     /* Keeps the image looking great without stretching */
-    display: block;
+.slide {
+  flex: 0 0 300px; /* Width of your images */
+  height: 400px;
+  scroll-snap-align: center; /* THE MAGIC LINE: Centers the active item */
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
@@ -784,22 +788,21 @@
         </div>
     </section>
     
-    <section class="image-slider-section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Gallery</h2>
-            <p>Slide to explore our kitchen</p>
-        </div>
-        
-        <div class="image-stream">
-            <div class="stream-item"><img src="image1.jpg" alt="Dish 1"></div>
-            <div class="stream-item"><img src="image2.jpg" alt="Dish 2"></div>
-            <div class="stream-item"><img src="image3.jpg" alt="Dish 3"></div>
-            <div class="stream-item"><img src="image4.jpg" alt="Dish 4"></div>
+    <section class="gallery-slider">
+    <div class="slider-wrapper">
+        <div class="image-track">
+            <div class="slides"><img src="item1.jpg" alt="Dish 1"></div>
+            <div class="slides"><img src="item2.jpg" alt="Dish 2"></div>
+            <div class="slides"><img src="item3.jpg" alt="Dish 3"></div>
+            <div class="slides"><img src="item4.jpg" alt="Dish 4"></div>
+            <div class="slides"><img src="item5.jpg" alt="Dish 5"></div>
         </div>
     </div>
 </section>
-
+    
+    
+    
+    
     <!-- Menu Section -->
     <section class="menu" id="menu">
         <div class="container">
@@ -918,6 +921,35 @@
     </footer>
 
     <script>
+
+
+const track = document.querySelector('.slider-wrapper');
+const slided = document.querySelectorAll('.slides');
+
+track.addEventListener('scroll', () => {
+    const trackCenter = track.scrollLeft + track.offsetWidth / 2;
+    
+    slided.forEach(slide => {
+        const slideCenter = slides.offsetLeft + slides.offsetWidth / 2;
+        const distance = Math.abs(trackCenter - slideCenter);
+        
+        // If the image is in the center, scale it up and make it bright
+        if (distance < 150) {
+            slides.style.transform = 'scale(1.1)';
+            slides.style.opacity = '1';
+            slides.style.zIndex = '10';
+        } else {
+            // Shrink and fade the images to the left and right
+            slides.style.transform = 'scale(0.85)';
+            slides.style.opacity = '0.5';
+            slides.style.zIndex = '1';
+        }
+    });
+});
+
+// Trigger once on load to set initial state
+track.dispatchEvent(new Event('scroll'));
+
 
 
       
