@@ -308,45 +308,43 @@
             transform: scale(1.05);
         }
 
-
-.slider-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* Hide scrollbar */
-  -ms-overflow-style: none;
+/* Container styling */
+#slide {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    padding: 60px 0;
+    /* This padding centers the first and last items */
+    padding-left: calc(50% - 150px); 
+    padding-right: calc(50% - 150px);
+    gap: 20px;
+    align-items: center;
+    background-color: transparent;
 }
 
-.slider-wrapper::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome */
+#slide::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
 }
 
-.image-track {
-  display: flex;
-  padding: 40px 0; /* Vertical breathing room */
-  /* This padding ensures the first and last images can also be centered */
-  padding-left: calc(50% - 150px); 
-  padding-right: calc(50% - 150px);
-  gap: 20px;
+.slide-item {
+    flex: 0 0 300px; /* Width of the images */
+    height: 400px;
+    scroll-snap-align: center;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    cursor: pointer;
 }
 
-.slide {
-  flex: 0 0 300px; /* Width of your images */
-  height: 400px;
-  scroll-snap-align: center; /* THE MAGIC LINE: Centers the active item */
-  transition: transform 0.4s ease, opacity 0.4s ease;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+.slide-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
-
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-
 
 
         /* Menu Section */
@@ -788,18 +786,15 @@
         </div>
     </section>
     
-    <section class="gallery-slider">
-    <div class="slider-wrapper">
-        <div class="image-track">
-            <div class="slides"><img src="item1.jpg" alt="Dish 1"></div>
-            <div class="slides"><img src="item2.jpg" alt="Dish 2"></div>
-            <div class="slides"><img src="item3.jpg" alt="Dish 3"></div>
-            <div class="slides"><img src="item4.jpg" alt="Dish 4"></div>
-            <div class="slides"><img src="item5.jpg" alt="Dish 5"></div>
-        </div>
+<section class="gallery-container">
+    <div id="slide">
+        <div class="slide-item"><img src="food1.jpg" alt="Loco Loca Dish"></div>
+        <div class="slide-item"><img src="food2.jpg" alt="Loco Loca Dish"></div>
+        <div class="slide-item"><img src="food3.jpg" alt="Loco Loca Dish"></div>
+        <div class="slide-item"><img src="food4.jpg" alt="Loco Loca Dish"></div>
+        <div class="slide-item"><img src="food5.jpg" alt="Loco Loca Dish"></div>
     </div>
 </section>
-    
     
     
     
@@ -923,32 +918,39 @@
     <script>
 
 
-const track = document.querySelector('.slider-wrapper');
-const slided = document.querySelectorAll('.slides');
+const track = document.getElementById('slide');
+const slides = document.querySelectorAll('.slide-item');
 
-track.addEventListener('scroll', () => {
-    const trackCenter = track.scrollLeft + track.offsetWidth / 2;
+function updateSliderFocus() {
+    // Determine the center point of the scroll container
+    const trackCenter = track.scrollLeft + (track.offsetWidth / 2);
     
-    slided.forEach(slide => {
-        const slideCenter = slides.offsetLeft + slides.offsetWidth / 2;
+    slides.forEach(slide => {
+        // Calculate the center of each individual slide
+        const slideCenter = slide.offsetLeft + (slide.offsetWidth / 2);
         const distance = Math.abs(trackCenter - slideCenter);
         
-        // If the image is in the center, scale it up and make it bright
+        // If the slide is near the center of the viewport
         if (distance < 150) {
-            slides.style.transform = 'scale(1.1)';
-            slides.style.opacity = '1';
-            slides.style.zIndex = '10';
+            slide.style.transform = 'scale(1.15)'; // Pop it out
+            slide.style.opacity = '1'; // Full brightness
+            slide.style.filter = 'brightness(100%)';
+            slide.style.zIndex = '10'; // Move to front
         } else {
-            // Shrink and fade the images to the left and right
-            slides.style.transform = 'scale(0.85)';
-            slides.style.opacity = '0.5';
-            slides.style.zIndex = '1';
+            // Faded/Small state for the 4 surrounding images
+            slide.style.transform = 'scale(0.85)';
+            slide.style.opacity = '0.4';
+            slide.style.filter = 'brightness(60%)';
+            slide.style.zIndex = '1';
         }
     });
-});
+}
 
-// Trigger once on load to set initial state
-track.dispatchEvent(new Event('scroll'));
+// Attach the listener to the scroll event
+track.addEventListener('scroll', updateSliderFocus);
+
+// Run once on page load to set the initial focus
+window.addEventListener('load', updateSliderFocus);
 
 
 
