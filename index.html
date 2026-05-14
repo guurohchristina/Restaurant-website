@@ -927,7 +927,7 @@
                 <div class="menu-item-content">
                     <div class="menu-item-title">
                         <h3>${item.name}</h3>
-                        <span class="menu-item-price">₵ (${item.price})</span>
+                        <span class="menu-item-price">₵ (${item.price}).00</span>
                     </div>
                     <p class="menu-item-desc">${item.description}</p>
                 </div>`;
@@ -940,7 +940,7 @@
     function openModal(item) {
         modalTitle.textContent = item.name;
         modalImg.src = item.image;
-        modalPrice.textContent = `₵ ${item.price}`;
+        modalPrice.textContent = `₵ (${item.price}).00`;
         modalDesc.textContent = item.description;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
