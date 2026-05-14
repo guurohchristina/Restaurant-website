@@ -813,7 +813,7 @@
                     </div>
                     <div class="form-group">
                         <label for="special-requests">Special Requests</label>
-                        <textarea id="special-requests" name="special-requests"></textarea>
+                        <textarea id="special" name="special-requests"></textarea>
                     </div>
                     <button type="submit" class="submit-order">Place Order</button>
                 </form>
@@ -972,7 +972,7 @@
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
             address: document.getElementById('address').value,
-            notes: document.getElementById('special-requests').value || "None"
+            notes: document.getElementById('special').value || "None"
         };
 
         submitBtn.textContent = "Sending Order...";
