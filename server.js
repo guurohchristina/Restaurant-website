@@ -22,7 +22,7 @@ const customerMessage = `Hello🤗 ${data.name}, thank you for ordering from Loc
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        recipient: ["0551218719"],
+        recipient: ["0246704206"],
         sender: "Loco Loca", // Use "mNotify" as sender until "LocoLoca" is approved by them
         message: message,
         is_schedule: false
